@@ -4,15 +4,42 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public int health = 10;
+    public GameObject deathEffect;
+    public Transform player;
+    public float speed = 5.0f;
+
+    private void Start()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+
+
+    }
+
+    private void FixedUpdate()
+    {
+        transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.fixedDeltaTime);
+    }
+
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Instantiate(deathEffect, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 }
