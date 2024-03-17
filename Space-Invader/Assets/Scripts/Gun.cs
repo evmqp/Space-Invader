@@ -12,8 +12,8 @@ public class Gun : MonoBehaviour
     public TextMeshProUGUI bulletCountText;
     private int bulletCount = 100;
 
-    public float bulletForce = 20f;
-    public float waitencyTime = 0.125f;
+    public float bulletForce;
+    public float waitTime;
 
     float timer = 0.0f;
 
@@ -24,7 +24,7 @@ public class Gun : MonoBehaviour
         timer += Time.deltaTime;
         if (Input.GetKey(KeyCode.Space))
         {
-            if (timer >= waitencyTime && bulletCount > 0)
+            if (timer >= waitTime && bulletCount > 0)
             {
                 Shoot();
                 bulletCount--;

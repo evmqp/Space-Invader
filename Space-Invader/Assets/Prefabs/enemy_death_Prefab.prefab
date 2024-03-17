@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4486956992544041684}
   - component: {fileID: 5797263622838298077}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: enemy_death_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7524427504635881052}
   - component: {fileID: 8216182624188362888}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TrackLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,8 @@ GameObject:
   - component: {fileID: 1467974039440901525}
   - component: {fileID: 6814965887384723125}
   - component: {fileID: 7430163939182329255}
-  m_Layer: 0
+  - component: {fileID: 3669042545570363127}
+  m_Layer: 3
   m_Name: bulletPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,3 +232,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &3669042545570363127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3617059047266512994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b5bda23384ea248a40fd29bda85fe6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitEffect: {fileID: 1953457628541116166, guid: 808095d602b022240a4507079f3425da, type: 3}
+  whatIsSolid:
+    serializedVersion: 2
+    m_Bits: 1
+  distance: 0.5
+  damage: 1

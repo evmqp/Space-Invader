@@ -6,15 +6,26 @@ using UnityEngine.Tilemaps;
 public class Bullet : MonoBehaviour
 {
     public GameObject hitEffect;
+    public LayerMask whatIsSolid;
+    public float distance;
+    public int damage;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public void Update()
     {
-        Enemy enemy = other.GetComponent<Enemy>();
-        if (enemy != null)
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.up, distance, whatIsSolid);
+        if (hitInfo.collider != null)
         {
-            enemy.TakeDamage(1);
+            if (hitInfo.collider.CompareTag("Enemy"))
+            {
+                hitInfo.collider.GetComponent<Enemy>().TakeDamage(damage);
+            }
+            DestroyBullet();
         }
-        GameObject effect = Instantiate(hitEffect, transform.position, Quaternion.identity);
+    }
+
+    public void DestroyBullet()
+    {
+        GameObject effect = Instantiate(hitEffect, transform.position, transform.rotation);
         Destroy(effect, 1f);
         Destroy(gameObject);
     }
