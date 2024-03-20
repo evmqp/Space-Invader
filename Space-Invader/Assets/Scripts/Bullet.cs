@@ -13,11 +13,17 @@ public class Bullet : MonoBehaviour
     public void Update()
     {
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.up, distance, whatIsSolid);
+
         if (hitInfo.collider != null)
         {
             if (hitInfo.collider.CompareTag("Enemy"))
             {
                 hitInfo.collider.GetComponent<Enemy>().TakeDamage(damage);
+            }
+            else
+            {
+                GameObject effect = Instantiate(hitEffect, transform.position, transform.rotation);
+                Destroy(effect, 1f);
             }
             DestroyBullet();
         }
@@ -25,8 +31,6 @@ public class Bullet : MonoBehaviour
 
     public void DestroyBullet()
     {
-        GameObject effect = Instantiate(hitEffect, transform.position, transform.rotation);
-        Destroy(effect, 1f);
         Destroy(gameObject);
     }
 }
