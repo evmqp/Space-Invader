@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Describes an enemy
+/// </summary>
 public class Enemy : MonoBehaviour
 {
 
-    public int health;
-    public GameObject deathEffect;
-    private Transform player;
-    public float speed;
+    public int health; /*!< Current health */
+    public GameObject deathEffect; /*!< Effect playing just after health of an enemy become 0 */
+    private Transform player; /*!< Location of the player */
+    public float speed; /*!< Enemie's speed */
 
     private void Start()
     {
@@ -24,7 +27,10 @@ public class Enemy : MonoBehaviour
 
     }
 
-
+    /// <summary>
+    /// Take damage to enemy by player
+    /// </summary>
+    /// <param name="damage">How much damage will be taken</param>
     public void TakeDamage(int damage)
     {
         health -= damage;

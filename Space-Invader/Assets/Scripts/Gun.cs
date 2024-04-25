@@ -5,15 +5,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+/// <summary>
+/// Player gun
+/// </summary>
 public class Gun : MonoBehaviour
 {
-    public Transform firePoint;
+    public Transform firePoint;                 /*!< Bullet generation location */
     public GameObject bulletPrefab;
-    public TextMeshProUGUI bulletCountText;
+    public TextMeshProUGUI bulletCountText;     /*!<A text object showing the number of bullets remaining */
     private int bulletCount = 100;
 
-    public float bulletForce;
-    public float waitTime;
+    public float bulletForce;                   /*!< The force with which bullets start flying */
+    public float waitTime;                      /*!< Delay between bullet generation */
 
     float timer = 0.0f;
 
@@ -38,7 +41,10 @@ public class Gun : MonoBehaviour
         }
     }
 
-    private void Shoot()
+    /// <summary>
+    /// Generating new bullet
+    /// </summary>
+    public void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();

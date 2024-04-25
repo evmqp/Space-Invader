@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// Class for bullets
+/// </summary>
 public class Bullet : MonoBehaviour
 {
-    public GameObject hitEffect;
-    public LayerMask whatIsSolid;
-    public float distance;
-    public int damage;
+    public GameObject hitEffect; /*!< The effect of bullets exploding upon collision with objects */
+    public LayerMask whatIsSolid; /*!< Determines what is an obstacle */
+    public float distance; /*!< The maximum distance a bullet flying */
+    public int damage; /*!< The damage a bullet does to an object */
 
     public void Update()
     {
@@ -29,6 +32,9 @@ public class Bullet : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Destroys bullet
+    /// </summary>
     public void DestroyBullet()
     {
         Destroy(gameObject);

@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Sets the room's environment and tracks the player's progress in the level
+/// </summary>
 public class AddRoom : MonoBehaviour
 {
-    public GameObject[] enemyTypes;
-    public Transform[] enemySpawners;
-    public GameObject shield;
+    public GameObject[] enemyTypes; /*!< Types of enemies */
+    public Transform[] enemySpawners; /*!<location on the map where enemies spawn */
+    public GameObject shield; /*!< Shield to use by player  */
 
     [HideInInspector] public List<GameObject> enemies;
 
@@ -43,6 +46,9 @@ public class AddRoom : MonoBehaviour
         LevelComplete();
     }
 
+    /// <summary>
+    /// Events when level completed
+    /// </summary>
     public void LevelComplete()
     {
         Debug.Log("Level Completed!");
