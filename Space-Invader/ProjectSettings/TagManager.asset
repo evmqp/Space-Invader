@@ -9,6 +9,7 @@ TagManager:
   - Box
   - Entry
   - Bug egg
+  - Computer
   layers:
   - Default
   - TransparentFX

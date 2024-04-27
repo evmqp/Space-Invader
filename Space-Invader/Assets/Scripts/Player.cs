@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
         level = 0;
         health = 0;
         
-        LoadPlayer();
+        //LoadPlayer();
     }
 
     private void Start()
