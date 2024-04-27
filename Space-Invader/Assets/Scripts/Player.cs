@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        moveVelocity = moveInput.normalized *speed;
+        moveVelocity = moveInput.normalized * speed;
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
     }
 

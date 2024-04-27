@@ -10,6 +10,7 @@ TagManager:
   - Entry
   - Bug egg
   - Computer
+  - Coridor
   layers:
   - Default
   - TransparentFX

@@ -23,6 +23,7 @@ public class GameGenerator : MonoBehaviour
     public GameObject corridor_v;
     public int padding = 2;
     public bool generateAgain = false;
+    public GameObject LoadGameUI;
 
     private void create_attached_level(Transform[] entries, List<Transform> disabledEntries, bool isBossLevel = false)
     {
@@ -160,6 +161,7 @@ public class GameGenerator : MonoBehaviour
 
     void Start()
     {
+        LoadGameUI.SetActive(true);
         selected_levels = new List<int>();
         open_levels = new List<GameObject>();
         UnityEngine.Random.InitState((int)System.DateTime.Now.Ticks);
@@ -248,6 +250,7 @@ public class GameGenerator : MonoBehaviour
         
         if (generateAgain)
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        else LoadGameUI.SetActive(false);
 
     }
 
