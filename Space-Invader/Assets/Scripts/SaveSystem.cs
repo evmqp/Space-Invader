@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using UnityEditor;
-using UnityEditor.Timeline.Actions;
 
 /// <summary>
 /// A class designed to operate the game saving and loading system

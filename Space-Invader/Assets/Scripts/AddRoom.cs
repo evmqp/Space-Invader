@@ -8,18 +8,19 @@ using UnityEngine;
 /// </summary>
 public class AddRoom : MonoBehaviour
 {
-    public GameObject[] enemyTypes; /*!< Types of enemies */
-    public Transform[] enemySpawners; /*!<location on the map where enemies spawn */
-    public GameObject shield; /*!< Shield to use by player  */
+    public GameObject enemyObject; /*!< Enemy */
+    private GameObject enemy;
+    private GameObject[] enemySpawners; /*!<location on the map where enemies spawn */
 
-    [HideInInspector] public List<GameObject> enemies;
+    //[HideInInspector] public List<GameObject> enemies;
+    public List<GameObject> enemies;
 
     private bool spawned;
 
 
     private void Start()
     {
-
+        enemySpawners = GameObject.FindGameObjectsWithTag("Bug egg");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -27,13 +28,14 @@ public class AddRoom : MonoBehaviour
         if (other.CompareTag("Player") && !spawned)
         {
             spawned = true;
-
-            foreach (Transform spawner in enemySpawners)
+            foreach (GameObject spawner in enemySpawners)
             {
-                GameObject enemyType = enemyTypes[Random.Range(0, enemyTypes.Length)];
-                GameObject enemy = Instantiate(enemyType, spawner.position, Quaternion.identity) as GameObject;
-                enemy.transform.parent = transform;
-                enemies.Add(enemy);
+                if (spawner.transform.parent.name == gameObject.transform.parent.parent.name)
+                {
+                    enemy = Instantiate(enemyObject, spawner.transform.position, Quaternion.identity);
+                    enemies.Add(enemy);
+                    spawner.SetActive(false);
+                }
             }
         }
         StartCoroutine(CheckEnemies());

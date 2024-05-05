@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     public int level = 1; /*!< Current level */
     public int health = 3; /*!< Current health */
     public float speed; /*!< Speed of player's moving */
+    public GameObject playerInterface;
     public Camera cam; /*!< Camera following to player */
     private Rigidbody2D rb;
     private Vector2 moveInput;
@@ -26,6 +27,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        playerInterface.SetActive(true);
         rb = GetComponent<Rigidbody2D>();
     }
 

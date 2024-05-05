@@ -23,12 +23,12 @@ public class Bullet : MonoBehaviour
             {
                 hitInfo.collider.GetComponent<Enemy>().TakeDamage(damage);
             }
-            else
+            if (!hitInfo.collider.CompareTag("Entry"))
             {
                 GameObject effect = Instantiate(hitEffect, transform.position, transform.rotation);
                 Destroy(effect, 1f);
-            }
-            DestroyBullet();
+                DestroyBullet();
+            } 
         }
     }
 

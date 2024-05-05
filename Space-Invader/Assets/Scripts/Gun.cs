@@ -23,7 +23,7 @@ public class Gun : MonoBehaviour
 
     private void Start()
     {
-        //bulletCountText.text = $"{bulletCount}";
+        bulletCountText.text = $"{bulletCount}";
     }
 
     private void Update()

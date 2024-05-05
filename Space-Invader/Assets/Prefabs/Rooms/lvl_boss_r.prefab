@@ -195,7 +195,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: ae895cb95140e884496266b81daa26b0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6611806a9713d024a9f739ab614beab0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -391,6 +391,7 @@ GameObject:
   - component: {fileID: 6070822354047601341}
   - component: {fileID: 1829006351460042332}
   - component: {fileID: 5280716963280359183}
+  - component: {fileID: 6113198974694480350}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Untagged
@@ -1108,6 +1109,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76e6aa79f8f48d94a9c914aeaccc7b43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &6113198974694480350
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8499853629077436828}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
 --- !u!1001 &1474989761597584910
 PrefabInstance:
   m_ObjectHideFlags: 0

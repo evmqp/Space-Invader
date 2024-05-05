@@ -14,7 +14,7 @@ public class cameraToPlayer : MonoBehaviour
     public Transform player;
     public Vector3 offset;
     private bool mapIsOpened = false;
-    public float currentScrollDelta = 100f;
+    public float currentScrollDelta;
     public float speed;
     public float scrollSpeed;
     public float defaultScale = 5f;
