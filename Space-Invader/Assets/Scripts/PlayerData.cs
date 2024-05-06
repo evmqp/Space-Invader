@@ -7,6 +7,7 @@ public class PlayerData
 {
     public int level;
     public int health;
+    public int ammo;
     public float[] position;
     public bool isNewGame;
 
@@ -18,6 +19,7 @@ public class PlayerData
     {
         level = player.level;
         health = player.health;
+        ammo = player.ammo;
 
         position = new float[3];
         position[0] = player.transform.position.x;

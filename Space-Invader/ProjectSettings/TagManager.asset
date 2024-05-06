@@ -11,6 +11,8 @@ TagManager:
   - Bug egg
   - Computer
   - Coridor
+  - Box ammo
+  - Box shield
   layers:
   - Default
   - TransparentFX

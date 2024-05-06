@@ -9,6 +9,7 @@ using UnityEngine;
 public class AddRoom : MonoBehaviour
 {
     public GameObject enemyObject; /*!< Enemy */
+    public int enemiesFromOneSpawner;
     private GameObject enemy;
     private GameObject[] enemySpawners; /*!<location on the map where enemies spawn */
 
@@ -32,8 +33,12 @@ public class AddRoom : MonoBehaviour
             {
                 if (spawner.transform.parent.name == gameObject.transform.parent.parent.name)
                 {
-                    enemy = Instantiate(enemyObject, spawner.transform.position, Quaternion.identity);
-                    enemies.Add(enemy);
+                    for (int i = 0; i < enemiesFromOneSpawner; i++)
+                    {
+                        enemy = Instantiate(enemyObject, spawner.transform.position, Quaternion.identity);
+                        enemies.Add(enemy);
+                    }
+                    
                     spawner.SetActive(false);
                 }
             }

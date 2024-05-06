@@ -10,12 +10,22 @@ public class Box : MonoBehaviour
     void Start()
     {
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = boxSprites[Random.Range(0, boxSprites.Length)];
+        int boxType = Random.Range(0, boxSprites.Length-1);
+        spriteRenderer.sprite = boxSprites[boxType];
+        if (boxType == 0)
+            gameObject.tag = "Box ammo";
+        else
+            gameObject.tag = "Box shield";
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (gameObject.tag == "Box")
+        {
+            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer.sprite = boxSprites[boxSprites.Length - 1];
+        }
+            
     }
 }
