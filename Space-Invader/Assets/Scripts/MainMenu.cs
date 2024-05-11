@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
@@ -10,6 +11,7 @@ using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 /// </summary>
 public class MainMenu : MonoBehaviour
 {
+    public GameObject AudioObject;
     public GameObject settingsMenu;
 
     /// <summary>
@@ -24,6 +26,7 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
+        AudioObject.GetComponent<AudioSource>().Play();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

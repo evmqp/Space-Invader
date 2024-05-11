@@ -13,6 +13,9 @@ TagManager:
   - Coridor
   - Box ammo
   - Box shield
+  - Boss
+  - Boss bullet
+  - Grenade
   layers:
   - Default
   - TransparentFX

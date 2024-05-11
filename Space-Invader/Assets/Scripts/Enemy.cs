@@ -9,7 +9,8 @@ public class Enemy : MonoBehaviour
 {
 
     public int health; /*!< Current health */
-    public GameObject deathEffect; /*!< Effect playing just after health of an enemy become 0 */
+    public GameObject deathEffectPrefab; /*!< Effect playing just after health of an enemy become 0 */
+    private GameObject deathEffect;
     private Transform player; /*!< Location of the player */
     public float speed; /*!< Enemie's speed */
 
@@ -20,11 +21,14 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.fixedDeltaTime);
-        Vector3 direction = player.position - transform.position;
+        //transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.fixedDeltaTime);
+        //Vector3 direction = player.position - transform.position;
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        Vector2 targetPosition = player.position;
+        Vector2 direction = (targetPosition - rb.position).normalized;
+        rb.velocity = direction * speed;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle + 90f));
-
     }
 
     /// <summary>
@@ -41,9 +45,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void Die()
+    public void Die()
     {
-        Instantiate(deathEffect, transform.position, Quaternion.identity);
+        deathEffect = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 }

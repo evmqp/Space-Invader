@@ -35,7 +35,8 @@ public class Computer : MonoBehaviour
         if (computerIsOn && !actionCompleted)
             if ((isStartRoom && Input.GetKeyDown(KeyCode.Escape)) || (!isStartRoom && Input.GetKeyDown(KeyCode.E)))
             {
-                Destroy(door);
+                door.GetComponent<Animator>().SetBool("isOpening", true);
+                Destroy(door, 0.5f);
                 ComputerMonitor.SetActive(false);
                 ComputerText.enabled = false;
                 actionCompleted = true;

@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEngine.GraphicsBuffer;
 
 /// <summary>
 /// Class for player
@@ -12,38 +14,47 @@ public class Player : MonoBehaviour
 {
     public int level = 1; /*!< Current level */
     public int health = 3; /*!< Current health */
+    public AudioClip musicWorld;
+    public AudioClip musicFightStart;
+    public AudioClip musicFight;
+    public AudioClip bossStart;
+    public AudioClip bossMusic;
+    public AudioClip bossMusic2;
+    public AudioClip bossMusic3;
+    public AudioClip step;
+    public AudioClip boxOpenClip;
+    public int grenadeNum;
+    public int grenadeNumInBox;
     public int ammo;
     public int shield;
     public float speed; /*!< Speed of player's moving */
     public GameObject playerInterface;
+    public GameObject ShieldImage;
     public GameObject DiedImage;
+    public GameObject SurvivedImage;
     public Camera cam; /*!< Camera following to player */
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private Vector2 moveVelocity;
     private Vector2 mousePos;
     public TextMeshProUGUI ammoText;
+    public TextMeshProUGUI grenadeText;
     private bool died;
-    public bool cheatMode;
-    public GameObject grenade;
-    public float distanceInFrontStart;
-    public float distanceInFrontEnd;
-    public float grenadeSpeed;
-    private bool isThrowingGrenade;
-
-    private void Awake()
-    {
-        level = 0;
-        health = 0;
-        
-        //LoadPlayer();
-    }
+    public GameObject grenadePrefab;
+    public bool restartLevel;
+    private GameObject entry;
+    public int completedLevels;
+    public float grenadeMoveSpeed;
+    private Animator anim;
+    public GameObject flashlight;
 
     private void Start()
     {
         playerInterface.SetActive(true);
         ammoText.text = ammo.ToString();
+        grenadeText.text = grenadeNum.ToString();
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -53,8 +64,25 @@ public class Player : MonoBehaviour
         moveVelocity = moveInput.normalized * speed;
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
-        //if (Input.GetKeyDown(KeyCode.Q) && !isThrowingGrenade)
-        //    ThrowGrenade();
+        if (Input.GetKeyDown(KeyCode.Q) && grenadeNum > 0)
+            ThrowGrenade();
+
+        if (Input.GetKeyDown(KeyCode.F))
+            flashlight.SetActive(!flashlight.activeSelf);
+        if (moveVelocity != Vector2.zero)
+        {
+            anim.SetBool("isRunning", true);
+            AudioSource audioSource = GetComponent<AudioSource>();
+            audioSource.volume = PlayerPrefs.GetFloat("volume");
+            audioSource.clip = step;
+            if (!audioSource.isPlaying)
+                audioSource.Play();
+        }
+        else
+        {
+            anim.SetBool("isRunning", false);
+        }
+        cam.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("volume");
     }
 
     private void FixedUpdate()
@@ -62,7 +90,6 @@ public class Player : MonoBehaviour
         rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
         Vector2 lookDir = mousePos - rb.position;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
-
         rb.rotation = angle;
     }
 
@@ -70,24 +97,46 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("Lost!");
-            if (shield == 0 && !died && !cheatMode)
+            if (shield == 0 && !died)
             {
-                died = true;
-                StartCoroutine(ShowFinalMessage());
+                health--;
+                if (health == 0)
+                {
+                    died = true;
+                    StartCoroutine(ShowFinalMessage(false));
+                }
+                else
+                {
+                    entry.GetComponent<AddRoom>().RestartLevel();
+                }   
             }
             else
             {
                 shield = 0;
+                ShieldImage.SetActive(false);
                 Destroy(collision.gameObject);
             }
                 
         }
     }
 
-    private IEnumerator ShowFinalMessage()
+    public void EndGame()
     {
-        DiedImage.SetActive(true);
+        StartCoroutine(ShowFinalMessage(true));
+    }
+
+    private IEnumerator ShowFinalMessage(bool success)
+    {
+        AudioSource audioSource = cam.GetComponent<AudioSource>();
+        audioSource.Stop();
+        GameObject endMessage;
+        if (success)
+        {
+            endMessage = SurvivedImage;
+            yield return new WaitForSeconds(10f);
+        }  
+        else endMessage = DiedImage;
+        endMessage.SetActive(true);
         yield return new WaitForSeconds(5);
         SceneManager.LoadScene("MainMenu");
     }
@@ -95,39 +144,56 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.CompareTag("Boss bullet"))
+        {
+            Destroy(other);
+            if (shield == 0 && !died)
+            {
+                if (health == 0)
+                {
+                    died = true;
+                    StartCoroutine(ShowFinalMessage(false));
+                }
+                else
+                {
+                    health--;
+                    entry.GetComponent<BossLevel>().RestartLevel();
+                }
+            }
+            else
+            {
+                shield = 0;
+                ShieldImage.SetActive(false);
+            }
+        }
+        if (other.CompareTag("Entry"))
+        {
+            entry = other.gameObject;
+        }
+
         if (other.CompareTag("Box ammo"))
         {
+            AudioSource audioSource = GetComponent<AudioSource>();
+            audioSource.volume = PlayerPrefs.GetFloat("volume");
+            audioSource.PlayOneShot(boxOpenClip);
             ammo += 1;
+            grenadeNum += grenadeNumInBox;
             ammoText.text = ammo.ToString();
+            grenadeText.text = grenadeNum.ToString();
             other.gameObject.tag = "Box";
         }
         else if (other.CompareTag("Box shield"))
         {
             if (shield == 0)
             {
+                AudioSource audioSource = GetComponent<AudioSource>();
+                audioSource.volume = PlayerPrefs.GetFloat("volume");
+                audioSource.PlayOneShot(boxOpenClip);
                 shield = 1;
+                ShieldImage.SetActive(true);
                 other.gameObject.tag = "Box";
             }   
         }
-    }
-
-    public void SavePlayer()
-    {
-        SaveSystem.SavePlayer(this);
-    }
-
-    public void LoadPlayer()
-    {
-        PlayerData data = SaveSystem.LoadPlayer();
-
-        level = data.level;
-        health = data.health;
-
-        Vector3 position;
-        position.x = data.position[0];
-        position.y = data.position[1];
-        position.z = -10;
-        transform.position = position;
     }
 
     public void SetAmmo(int new_ammo)
@@ -138,13 +204,83 @@ public class Player : MonoBehaviour
 
     public void ThrowGrenade()
     {
+        anim.SetBool("isThrowingGrenade", false);
+        anim.Play("PlayerThrowGrenade");
+
+        grenadeNum--;
+        grenadeText.text = grenadeNum.ToString();
         Vector3 playerPosition = transform.position;
         Quaternion playerRotation = transform.rotation;
-        Vector3 spawnPosition = playerPosition;
-        //Vector3 targetPosition = playerPosition + playerRotation * Vector3.forward * distanceInFrontEnd;
+        Vector3 spawnPosition = playerPosition + transform.up * 1f;
+        Vector3 targetPosition = playerPosition + transform.up * grenadeMoveSpeed;
 
-        Instantiate(grenade, spawnPosition, playerRotation);
+        GameObject grenade = Instantiate(grenadePrefab, spawnPosition, playerRotation);
+        Rigidbody2D grenade_rb = grenade.GetComponent<Rigidbody2D>();
+        Vector3 relativePos = targetPosition - grenade.transform.position;
+        grenade_rb.AddForce(relativePos);
+    }
 
-       // grenade.transform.position = Vector3.MoveTowards(grenade.transform.position, targetPosition, Time.deltaTime * grenadeSpeed);
+    public void PlayShootAnimation()
+    {
+        anim.SetBool("isShooting", false);
+        anim.Play("PlayerShoot");
+
+    }
+
+    public void PlayWorld()
+    {
+        AudioSource audioSource = cam.GetComponent<AudioSource>();
+        audioSource.clip = musicWorld;
+        audioSource.loop = true;
+        audioSource.Play();
+    }
+
+    public void PlayFight()
+    {
+        StartCoroutine(PlayFightSequence());
+    }
+
+    public void PlayBossStart()
+    {
+        AudioSource audioSource = cam.GetComponent<AudioSource>();
+        audioSource.clip = bossStart;
+        audioSource.loop = false;
+        audioSource.Play();
+    }
+
+    public void PlayBossMusic()
+    {
+        AudioSource audioSource = cam.GetComponent<AudioSource>();
+        audioSource.clip = bossMusic;
+        audioSource.loop = true;
+        audioSource.Play();
+    }
+
+    public void PlayBoss2()
+    {
+        AudioSource audioSource = cam.GetComponent<AudioSource>();
+        audioSource.clip = bossMusic2;
+        audioSource.loop = true;
+        audioSource.Play();
+    }
+
+    public void PlayBoss3()
+    {
+        AudioSource audioSource = cam.GetComponent<AudioSource>();
+        audioSource.clip = bossMusic3;
+        audioSource.loop = true;
+        audioSource.Play();
+    }
+
+    private IEnumerator PlayFightSequence()
+    {
+        AudioSource audioSource = cam.GetComponent<AudioSource>();
+        audioSource.clip = musicFightStart;
+        audioSource.loop = false;
+        audioSource.Play();
+        yield return new WaitUntil(() => !audioSource.isPlaying);
+        audioSource.clip = musicFight;
+        audioSource.loop = true;
+        audioSource.Play();
     }
 }

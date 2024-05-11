@@ -10,6 +10,8 @@ using UnityEngine.Rendering;
 /// </summary>
 public class Gun : MonoBehaviour
 {
+    public AudioClip shotSound;
+    public AudioClip rechargeSound;
     public Transform firePoint;                 /*!< Bullet generation location */
     public GameObject bulletPrefab;
     public TextMeshProUGUI bulletCountText;     /*!<A text object showing the number of bullets remaining */
@@ -18,6 +20,7 @@ public class Gun : MonoBehaviour
     public float bulletForce;                   /*!< The force with which bullets start flying */
     public float waitTime;                      /*!< Delay between bullet generation */
     private bool isRecharging;
+    public GameObject player;
 
     float timer = 0.0f;
 
@@ -30,25 +33,33 @@ public class Gun : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime;
-        if (Input.GetKey(KeyCode.Space) && !isRecharging)
+        if (Input.GetKey(KeyCode.Mouse0) && !isRecharging)
         {
+            AudioSource audioSource = GetComponent<AudioSource>();
+            audioSource.volume = PlayerPrefs.GetFloat("volume");
+            audioSource.clip = shotSound;
             if (timer >= waitTime && bulletCount > 0)
             {
+                if (!audioSource.isPlaying)
+                    audioSource.Play();
                 Shoot();
                 bulletCount--;
                 bulletCountText.text = $"{bulletCount}";
                 timer = 0;
             }
         }
+
         if (Input.GetKeyDown(KeyCode.R) && !isRecharging)
         {
-            int ammo = gameObject.GetComponent<Player>().ammo;
+            int ammo = gameObject.transform.parent.GetComponent<Player>().ammo;
             if (ammo > 0)
             {
-                gameObject.GetComponent<Player>().SetAmmo(ammo - 1);
+                AudioSource audioSource = GetComponent<AudioSource>();
+                audioSource.volume = PlayerPrefs.GetFloat("volume");
+                audioSource.PlayOneShot(rechargeSound);
+                gameObject.transform.parent.GetComponent<Player>().SetAmmo(ammo - 1);
                 StartCoroutine(Recharge(100));
             }
-            
         }
     }
 
@@ -70,6 +81,7 @@ public class Gun : MonoBehaviour
     /// </summary>
     public void Shoot()
     {
+        player.GetComponent<Player>().PlayShootAnimation();
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.AddForce(firePoint.up * bulletForce, ForceMode2D.Impulse);

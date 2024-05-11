@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class GameGenerator : MonoBehaviour
 {
-    public GameObject player;
     public GameObject[] start_levels;
     public GameObject[] levels;
     public GameObject[] boss_levels;
@@ -16,8 +16,7 @@ public class GameGenerator : MonoBehaviour
     public GameObject corridor_v;
     public int padding = 2;
     public bool generateAgain = false;
-    //public GameObject LoadGameUI;
-    //public GameObject progressImage;
+    public GameObject LoadGameUI;
 
     private void create_attached_level(Transform[] entries, List<Transform> disabledEntries, bool isBossLevel = false)
     {
@@ -171,6 +170,10 @@ public class GameGenerator : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 0;
+        LoadGameUI.SetActive(true);
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        player.transform.position = new Vector2(2, 0);
         selected_levels = new List<int>();
         open_levels = new List<GameObject>();
         UnityEngine.Random.InitState((int)System.DateTime.Now.Ticks);
@@ -256,22 +259,17 @@ public class GameGenerator : MonoBehaviour
 
         if (generateAgain)
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        //else StartCoroutine(SwitchOffLoadScreen());
-
-        //foreach (GameObject entryGroup in GameObject.Fi)
-        //{
-        //    Debug.Log(entryGroup.name + "     " + entryGroup.activeSelf);
-        //}
-            
-
-        player.SetActive(true);
+        else StartCoroutine(SwitchOffLoadScreen());
     }
 
-    //private IEnumerator SwitchOffLoadScreen()
-    //{
-    //    yield return new WaitForSeconds(3);
-    //    LoadGameUI.SetActive(false);
-    //}
+    private IEnumerator SwitchOffLoadScreen()
+    {
+        Time.timeScale = 1;
+        yield return new WaitForSeconds(3);
+        LoadGameUI.SetActive(false);
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        player.GetComponent<Player>().PlayWorld();
+    }
 
     // Update is called once per frame
     void Update()

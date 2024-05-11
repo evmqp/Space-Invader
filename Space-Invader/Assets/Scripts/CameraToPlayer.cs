@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.Rendering;
 using System;
 
 /// <summary>
@@ -18,6 +14,7 @@ public class cameraToPlayer : MonoBehaviour
     public float speed;
     public float scrollSpeed;
     public float defaultScale = 5f;
+    public bool freeze;
 
 
     private void Start()
@@ -26,7 +23,7 @@ public class cameraToPlayer : MonoBehaviour
     }
     void Update()
     {
-        if (!mapIsOpened)
+        if (!mapIsOpened && !freeze)
         {
             transform.position = player.position + offset;
             Camera.main.orthographicSize = defaultScale;
